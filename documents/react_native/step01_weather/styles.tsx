@@ -17,7 +17,6 @@ export const styles = StyleSheet.create({
     fontWeight: 400,
   },
   weather: {
-    backgroundColor: 'teal',
     flex: 2,
   },
   day: {

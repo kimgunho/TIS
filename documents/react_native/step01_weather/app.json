@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "step01_weather",
-    "slug": "step01_weather",
+    "slug": "teststep01",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,16 +12,24 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gunho.kim.teststep01"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.gunho.kim.teststep01"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "faf85f96-d4cd-42e6-a108-d2b2163805bd"
+      }
+    },
+    "owner": "gunho.kim"
   }
 }
