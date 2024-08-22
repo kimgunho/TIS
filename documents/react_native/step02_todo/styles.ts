@@ -16,6 +16,7 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 32,
     fontWeight: 600,
+    color: theme.white,
   },
   input: {
     backgroundColor: 'white',

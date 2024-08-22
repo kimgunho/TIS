@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Text,
   View,
@@ -9,6 +9,7 @@ import {
   TextInputSubmitEditingEventData,
   ScrollView,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { getDate, getTime } from './utils/getDate';
 import { getToDoData } from './utils/getTodoData';
@@ -16,17 +17,32 @@ import { theme } from './colors';
 import { styles } from './styles';
 import { ToDosDef } from './types';
 
+const STORAGE_KEY = '@toDos';
+
 export default function App() {
-  const [isWorking, setWorking] = useState<boolean>(true);
   const [toDos, setToDos] = useState<ToDosDef>({});
   const inputRef = useRef<TextInput | null>(null);
 
-  const handleWorking = () => {
-    setWorking(true);
+  useEffect(() => {
+    getToDos();
+  }, []);
+
+  const getToDos = async () => {
+    const latest = await AsyncStorage.getItem(STORAGE_KEY);
+    if (latest) {
+      saveToDos(JSON.parse(latest));
+    }
   };
 
-  const handleTravel = () => {
-    setWorking(false);
+  const saveToDos = async (saveToDos: ToDosDef) => {
+    setToDos(saveToDos);
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(saveToDos));
+  };
+
+  const removeToDo = (key: string) => {
+    const newToDos = { ...toDos };
+    delete newToDos[key];
+    saveToDos(newToDos);
   };
 
   const clearText = () => {
@@ -55,11 +71,11 @@ export default function App() {
       [Date.now()]: {
         text,
         isDone: false,
-        createAt: new Date(),
+        createAt: new Date().toDateString(),
       },
       ...toDos,
     };
-    setToDos(newToDos);
+    saveToDos(newToDos);
   };
 
   const changeDone = (key: string) => {
@@ -80,19 +96,14 @@ export default function App() {
       return { ...acc, [cur.id]: { text, createAt, isDone } };
     }, {});
 
-    setToDos(newToDos);
+    saveToDos(newToDos);
   };
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleWorking}>
-          <Text style={{ ...styles.text, color: isWorking ? theme.white : theme.gray }}>Work</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleTravel}>
-          <Text style={{ ...styles.text, color: !isWorking ? theme.white : theme.gray }}>Calendar</Text>
-        </TouchableOpacity>
+        <Text style={styles.text}>Work</Text>
       </View>
       <View>
         <TextInput

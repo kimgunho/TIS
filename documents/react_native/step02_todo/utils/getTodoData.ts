@@ -4,7 +4,7 @@ export const getToDoData = (
     {
       text: string;
       isDone: boolean;
-      createAt: Date;
+      createAt: string;
     }
   ]
 ) => {
